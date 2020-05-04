@@ -1,13 +1,14 @@
 package com.aaron;
 
-        import org.apache.kafka.clients.producer.KafkaProducer;
-        import org.apache.kafka.clients.producer.ProducerConfig;
-        import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
-        import java.util.Properties;
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 public class MyProducer {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         // 创建Kafka生产者的配置信息
         Properties properties = new Properties();
         String bootStrapServers = "192.168.1.101:9092, 192.168.1.102:9092, 182.168.1.103:9092";
@@ -37,7 +38,10 @@ public class MyProducer {
             // ProducerRecord<String, String> record = new ProducerRecord<>("my_topic", 0, "key-test", "this is test message of " + i);
             // 只指定topic名称与发送的数据，默认会通过轮询发送到各个分区里
             ProducerRecord<String, String> record = new ProducerRecord<>("my_topic", "this is test message of " + i);
+            // 异步发送
             producer.send(record);
+            // 同步发送：只需要再调用get()方法即可。该方法的作用是阻塞线程，生产环境中用得非常少
+//            producer.send(record).get();
 
         }
         // 关闭资源

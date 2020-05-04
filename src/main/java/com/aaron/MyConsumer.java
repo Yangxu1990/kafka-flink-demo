@@ -14,15 +14,16 @@ public class MyConsumer {
     public static void main(String[] args) {
         String kafkaServer = "192.168.1.101:9092,192.168.1.102:9092,192.168.1.104:9092";
         ArrayList<String> topicList = new ArrayList<String>();
-        topicList.add("topic_20200305");
+        topicList.add("my_topic");
 
-
+        //消费者配置信息
         Properties properties = new Properties();
         //连接kafka集群
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         //指定消费者组
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "test-consumer");
-//        properties.put(ConsumerConfig.EXCLUDE_INTERNAL_TOPICS_CONFIG, "test-consumer");
+        //是否开启kafka内部系统topic（默认情况下，kafka系统主题是不能被消费的）
+//        properties.put(ConsumerConfig.EXCLUDE_INTERNAL_TOPICS_CONFIG, true);
         //设置 offset自动提交
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         //自动提交间隔时间
